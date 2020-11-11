@@ -25,7 +25,11 @@ class GotSpider(scrapy.Spider):
     
     def get_characters_from_pages(self, response):
         """Builds the list of characters cited in the fandom page."""
-        return []
+        soup = BeautifulSoup(response.text, 'html.parser')
+        soup = soup.get_text()
+        words = set(re.findall('([A-Z][a-z]+)', soup))
+        return [w for w in words if w in CHARACTERS]
+        
     
     def parse(self, response):
         """Builds the characters list cited in the response and fetch all links.
